@@ -15,6 +15,19 @@ const GeoSchema = new Schema({
 		}
 });
 
+const DataDeviceSchema = new Schema({
+	
+	date:{
+		type: Date,
+		default: Date.now
+
+	},
+	value: {
+		type: String,
+		required: [true, 'value field is required']
+	}
+});
+
 //create ninja schema & model
 const NinjaSchema = new Schema({
 
@@ -39,4 +52,5 @@ const Ninja = mongoose.model('the_ninja', NinjaSchema);
 // put the ninja in global object
 module.exports = Ninja;
 
-
+const DataDevice = mongoose.model('data_device', DataDeviceSchema);
+module.exports = DataDevice;

@@ -1,31 +1,34 @@
 // get library express
 const express = require('express');
-// import routes api, init
-const routes = require('./routes/api');
-// set up body-parser, init
-const bodyParser = require('body-parser');
-// set up express app, init
-const app = express();
-// set up mongodb, init
-const mongoose = require('mongoose');
+const CronJob = require('cron').CronJob;
+const request = require('request');
+const nodeCmd = require('node-cmd');
+const data_point = require('./data');
 
-// connect to db
-mongoose.connect('mongodb://localhost/ninjago');
-mongoose.Promise = global.Promise;
+// cronjob time
+new CronJob(data_point.crontime, function() {
 
-// get the request body
-app.use(bodyParser.json());
+	// run the command and get the callback in data	
+	nodeCmd.get(data_point.cmd, function(err, data, stderr){
+            	
+		// post the request
+		request.post(
+			data_point.url,
+      			{ json: {"id": data_point.id, "point_value": data} },
+      			function (error, response, body) {
+          			if (!error && response.statusCode == 200) {
+					console.log(response.body);
+					console.log('1 point is saved');
+				}else{
+					console.log('ERROR IS HAPPENING');
+					console.log(error);
+					console.log(body);
+					console.log(response);
+				}
+      			}
+  		);
 
-// use routes
-app.use('/api', routes);
+	});
 
-// how to process error, error handling middleware
-app.use(function(err, req, res, next){
-	// give 422 status error (Unprocessable Entity)
-	res.status(422).send({error:err.message });
-});
+}, null, true, 'America/Los_Angeles');
 
-// listen to request in setup port or port 4000
-app.listen(process.env.port || 4000, function(req, res){
-	console.log('hello nodejs world! this is the second one');
-});
