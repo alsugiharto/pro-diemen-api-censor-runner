@@ -1,0 +1,12 @@
+[	
+	{
+		"url": "http://invibots.com:4000/api/point",
+		"point_table_id" : "point-temp-123",
+		"cmd": "vcgencmd measure_temp | sed 's/[^0-9.]//g'"
+	},
+	{
+		"url": "http://invibots.com:4000/api/point",
+		"point_table_id": "point-press-123",
+		"cmd": "cd ~ && sudo python Adafruit_Python_ADS1x15/examples/adafruit.py"
+	}
+]
