@@ -16,7 +16,13 @@ new CronJob(cron_time, function() {
 
 		// run the command and get the callback in data	
 		nodeCmd.get(data_point.cmd, function(err, data, stderr){
-            	
+
+			// data check
+			// if decimal, times 100
+			if (data%1 != 1){
+				data *= 100;
+			}
+
 			// post the request
 			request.post(
 				data_point.url,
@@ -30,7 +36,6 @@ new CronJob(cron_time, function() {
 						console.log('ERROR IS HAPPENING');
 						console.log(error);
 						console.log(body);
-						console.log(response);
 					}
 					console.log('====================');
       				}
