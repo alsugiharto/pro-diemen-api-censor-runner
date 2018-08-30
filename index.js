@@ -8,16 +8,18 @@ const point_base = require('./diemen_config.json');
 var cron_time = '*/15 * * * * *';
 
 new CronJob(cron_time, function() {
-
+	
 	// looping through diemen config
-	for (var x in point_base){
-
-		data_point = point_base[x];
+	// using for each to make sure all task are done before going to the next loop
+	point_base.forEach(data_point => {
 
 		// run the command and get the callback in data	
 		nodeCmd.get(data_point.cmd, function(err, data, stderr){
 
-			data *= 100;
+			// check for extra function
+			if(data_point.extra_function == 'times100'){
+				data *= 100;
+			}
 
 			// post the request
 			request.post(
@@ -39,6 +41,6 @@ new CronJob(cron_time, function() {
 
 		});
 
-	}
+	});
 
 }, null, true, 'America/Los_Angeles');
