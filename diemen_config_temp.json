@@ -1,6 +1,6 @@
 	{
 		"url": "http://invibots.com:4000/api/point",
 		"point_table_id" : "point-temp-123",
-		"cmd": "echo 20",
+		"cmd": "vcgencmd measure_temp | sed 's/[^0-9.]//g'",
 		"extra_function": "times100"
 	}
